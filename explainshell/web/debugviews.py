@@ -60,8 +60,8 @@ def tag(source):
             if not argument:
                 argument = None
             p = store.paragraph(idx, text, section, d['is_option'])
-            if d['is_option'] and (short or long or argument):
-                p = store.option(p, short, long, expectsarg, argument, nestedcommand)
+            if d['is_option'] and (short or int or argument):
+                p = store.option(p, short, int, expectsarg, argument, nestedcommand)
             mparagraphs.append(p)
 
         if request.form.get('nestedcommand', '').lower() == 'true':

@@ -139,7 +139,7 @@ def extract_option(txt):
     '''this is where the magic is (suppose) to happen. try and find options
     using a regex'''
     startpos = currpos = len(txt) - len(txt.lstrip())
-    short, long = [], []
+    short, int = [], []
 
     m = _option(txt, currpos)
 
@@ -148,7 +148,7 @@ def extract_option(txt):
         s = m.group('opt')
         po = extractedoption(s, m.group('arg'))
         if s.startswith('--'):
-            long.append(po)
+            int.append(po)
         else:
             short.append(po)
         currpos = m.end(0)
@@ -173,9 +173,9 @@ def extract_option(txt):
         while m:
             s = m.group('opt')
             po = extractedoption(s, m.group('arg'))
-            long.append(po)
+            int.append(po)
             currpos = m.end(0)
             currpos = _eatbetween(txt, currpos)
             m = _flag(txt, currpos)
 
-    return short, long
+    return short, int

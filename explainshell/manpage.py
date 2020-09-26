@@ -1,4 +1,4 @@
-import os, subprocess, re, logging, collections, urllib
+import os, subprocess, re, logging, collections, urllib.request, urllib.parse, urllib.error
 
 from explainshell import config, store, errors
 
@@ -180,7 +180,7 @@ class manpage(object):
     def read(self):
         '''Read the content from a local manpage file and store it in usable formats
         on the class instance.'''
-        cmd = [config.MAN2HTML, urllib.urlencode({'local' : os.path.abspath(self.path)})]
+        cmd = [config.MAN2HTML, urllib.parse.urlencode({'local' : os.path.abspath(self.path)})]
         logger.info('executing %r', ' '.join(cmd))
         self._text = subprocess.check_output(cmd, stderr=devnull, env=ENV)
         try:
@@ -199,7 +199,7 @@ class manpage(object):
             d = collections.OrderedDict()
             for prog, text in self.synopsis:
                 d.setdefault(text, []).append(prog)
-            text, progs = d.items()[0]
+            text, progs = list(d.items())[0]
             self.synopsis = text
             self.aliases.update(progs)
         self.aliases.remove(self.name)

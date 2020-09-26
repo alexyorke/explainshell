@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
-
-$MAN = $ENV{'W3MMAN_MAN'} || '@MAN@';
+use warnings;
+$MAN = $ENV{'W3MMAN_MAN'} || '/usr/bin/man';
 $QUERY = $ENV{'QUERY_STRING'} || $ARGV[0];
 $SCRIPT_NAME = $ENV{'SCRIPT_NAME'} || $0;
 $CGI = "file://$SCRIPT_NAME";
@@ -220,14 +220,18 @@ sub is_command {
   local($p);
 
   (! -d && -x) || return 0;
-  if (! defined(%PATH)) {
+  if (! %PATH) {
     for $p (split(":", $ENV{'PATH'})) {
       $p =~ s@/+$@@;
       $PATH{$p} = 1;
     }
   }
   s@/[^/]*$@@;
-  return defined($PATH{$_});
+if ($PATH{$_}) {
+	return True;
+} else { 
+	return False;
+}
 }
 
 sub file_ref {

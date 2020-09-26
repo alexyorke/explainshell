@@ -2,6 +2,6 @@ tests:
 	nosetests --with-doctest tests/ explainshell/
 
 serve:
-	python runserver.py
+	python3 runserver.py
 
 .PHONY: tests
