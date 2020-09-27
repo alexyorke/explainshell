@@ -30,7 +30,7 @@ def is_indented(paragraph):
     return paragraph != paragraph.lstrip()
 
 def par_length(paragraph):
-    return round(len(paragraph.strip()), -1) / 2
+    return round(len(paragraph.strip()), -1) // 2
 
 def first_line_contains(paragraph, what):
     l = paragraph.splitlines()[0]
@@ -38,7 +38,7 @@ def first_line_contains(paragraph, what):
 
 def first_line_length(paragraph):
     first = extract_first_line(paragraph)
-    return round(len(first), -1) / 2
+    return round(len(first), -1) // 2
 
 def first_line_word_count(paragraph):
     first = extract_first_line(paragraph)
