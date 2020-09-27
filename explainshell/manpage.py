@@ -120,15 +120,16 @@ def _parsetext(lines):
     section = None
     i = 0
     for l in lines:
-        l = re.sub(_href, r'<a href="http://manpages.ubuntu.com/manpages/precise/en/man\2/\1.\2.html">', l)
+        lold = l
+        l = re.sub(_href, r'<a href="http://manpages.ubuntu.com/manpages/precise/en/man\2/\1.\2.html">', l.decode('utf8'))
         for lookfor, replacewith in _replacements:
             l = re.sub(lookfor, replacewith, l)
         # confirm the line is valid utf8
-        lreplaced = l.decode('utf8', 'ignore').encode('utf8')
-        if lreplaced != l:
-            logger.error('line %r contains invalid utf8', l)
-            l = lreplaced
-            raise ValueError
+        lreplaced = lold.decode('utf8', 'ignore').encode('utf8')
+        #if lreplaced != l:
+        #    logger.error('line %r contains invalid utf8', l)
+        #    l = lreplaced
+        #    raise ValueError
         if l.startswith('<b>'): # section
             section = re.sub(_section, r'\1', l)
         else:
@@ -184,7 +185,7 @@ class manpage(object):
         logger.info('executing %r', ' '.join(cmd))
         self._text = subprocess.check_output(cmd, stderr=devnull, env=ENV)
         try:
-            self.synopsis = subprocess.check_output(['lexgrog', self.path], stderr=devnull).rstrip()
+            self.synopsis = subprocess.check_output(['lexgrog', self.path], stderr=devnull).rstrip().decode("latin1")
         except subprocess.CalledProcessError:
             logger.error('failed to extract synopsis for %s', self.name)
 

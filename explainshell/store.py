@@ -33,7 +33,7 @@ class paragraph(object):
 
     @staticmethod
     def from_store(d):
-        p = paragraph(d.get('idx', 0), d['text'].encode('utf8'), d['section'], d['is_option'])
+        p = paragraph(d.get('idx', 0), d['text'], d['section'], d['is_option'])
         return p
 
     def to_store(self):
@@ -62,8 +62,11 @@ class option(paragraph):
     def __init__(self, p, short, long, expectsarg, argument=None, nestedcommand=False):
         paragraph.__init__(self, p.idx, p.text, p.section, p.is_option)
         self.short = short
-        self.long = int
-        self._opts = self.short + self.long
+        self.long = str(int)
+        tmp = self.short
+        print(">>>>>>>>", self.long)
+        tmp.append(self.long)
+        self._opts = [str(x) for x in tmp[:]]
         self.argument = argument
         self.expectsarg = expectsarg
         self.nestedcommand = nestedcommand
@@ -341,7 +344,7 @@ class store(object):
             self.mapping.remove({'dst' : d['_id']})
             c -= self.mapping.count()
             logger.info('removed %d mappings for manpage %s', c, m.source)
-
+        print(m.to_store())
         o = self.manpage.insert(m.to_store())
 
         for alias, score in m.aliases:
@@ -386,12 +389,12 @@ class store(object):
         return ok, unreachable, notfound
 
     def names(self):
-        cursor = self.manpage.find(fields={'name':1})
+        cursor = self.manpage.find({},{'name':1})
         for d in cursor:
             yield d['_id'], d['name']
 
     def mappings(self):
-        cursor = self.mapping.find(fields={'src':1})
+        cursor = self.mapping.find({},{'src':1})
         for d in cursor:
             yield d['src'], d['_id']
 

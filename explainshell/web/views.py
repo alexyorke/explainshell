@@ -87,7 +87,7 @@ def explainprogram(program, store):
           'section' : mp.section,
           'program' : program,
           'synopsis' : synopsis,
-          'options' : [o.text.decode('utf-8') for o in mp.options]}
+          'options' : [o.text for o in mp.options]}
 
     suggestions = []
     for othermp in mps:
@@ -147,7 +147,6 @@ def explaincommand(command, store):
             helpclass = 'help-%d' % len(texttoid)
             text = m.text
             if text:
-                text = text.decode('utf-8')
                 helpclass = texttoid.setdefault(text, helpclass)
             else:
                 commandclass += ' unknown'
